@@ -11,6 +11,10 @@ const limiter = RateLimit({
   max: 20,
 });
 require('dotenv').config();
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -29,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(compression());
 app.use(helmet());
 app.use(limiter);
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(passport.session());
 
 // create mongoose connection to database
 const mongoose = require('mongoose');
