@@ -1,5 +1,9 @@
 extends layout
 
+block sidebar
+  a(href="/users/sign-up") Sign up 
+  a(href="/users/login") Login 
+
 block content
-  h1= title
-  p Welcome to #{title}
+  h2= title
+  

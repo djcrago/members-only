@@ -4,4 +4,9 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div.block-sidebar
+      h1 Health Club
+      a(href="/") Home 
+      block sidebar
+    div.block-content
+      block content

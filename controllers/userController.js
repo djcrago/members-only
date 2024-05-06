@@ -5,15 +5,15 @@ const User = require('../models/user');
 const Message = require('../models/message');
 
 module.exports.index = asyncHandler(async (req, res, next) => {
-  res.render('index', { title: 'Health Club' });
+  res.render('index', { title: 'Home Page' });
 });
 
 module.exports.sign_up_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Sign-up get');
+  res.render('sign_up_form', { title: 'Sign up Form' });
 });
 
 module.exports.sign_up_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Sign-up post');
+  res.send('NOT IMPLEMENTED: Sign up post');
 });
 
 module.exports.login_get = asyncHandler(async (req, res, next) => {
