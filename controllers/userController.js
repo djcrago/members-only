@@ -1,12 +1,13 @@
-const asyncHandler = require('express-async-handler');
-const { body, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
-
 const User = require('../models/user');
 const Message = require('../models/message');
 
+const asyncHandler = require('express-async-handler');
+const { body, validationResult } = require('express-validator');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
+
 module.exports.index = asyncHandler(async (req, res, next) => {
-  res.render('index', { title: 'Home Page' });
+  res.render('index', { title: 'Home Page', user: req.user });
 });
 
 module.exports.user_detail = asyncHandler(async (req, res, next) => {
@@ -36,7 +37,7 @@ module.exports.sign_up_post = [
     .custom(async (value) => {
       const userExists = await User.findOne({ username: value }).exec();
       if (userExists) {
-        throw new Error('Email already is use');
+        throw new Error('Email is already in use');
       }
     }),
   body('password')
@@ -53,29 +54,32 @@ module.exports.sign_up_post = [
     }),
 
   asyncHandler(async (req, res, next) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      res.render('sign_up_form', {
-        title: 'Sign-up Page',
-        user,
-        errors: errors.array(),
-      });
-    }
-
     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
       if (err) return next(err);
 
-      const user = new User({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        username: req.body.username,
-        password: hashedPassword,
-        member: false,
-      });
+      const errors = validationResult(req);
 
-      await user.save();
-      res.redirect(user.url);
+      if (!errors.isEmpty()) {
+        res.render('sign_up_form', {
+          title: 'Sign-up Page',
+          user: req.body,
+          errors: errors.array(),
+        });
+      } else {
+        try {
+          const user = new User({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            username: req.body.username,
+            password: hashedPassword,
+            member: false,
+          });
+          await user.save();
+          res.redirect('/');
+        } catch (err) {
+          return next(err);
+        }
+      }
     });
   }),
 ];
@@ -84,8 +88,16 @@ module.exports.login_get = asyncHandler(async (req, res, next) => {
   res.render('login_form', { title: 'Login Page' });
 });
 
-module.exports.login_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Login post');
+module.exports.login_post = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/users/login',
+});
+
+module.exports.log_out_get = asyncHandler(async (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+    res.redirect('/');
+  });
 });
 
 module.exports.join_the_club_get = asyncHandler(async (req, res, next) => {

@@ -13,8 +13,10 @@ const limiter = RateLimit({
 require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local');
 const bcrypt = require('bcryptjs');
+
+const User = require('./models/user');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -25,14 +27,7 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(compression());
-app.use(helmet());
-app.use(limiter);
+// setup passportjs
 app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
 app.use(passport.session());
 
@@ -45,6 +40,7 @@ passport.use(
       }
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
+        // passwords do not match!
         return done(null, false, { message: 'Incorrect password' });
       }
       return done(null, user);
@@ -64,6 +60,15 @@ passport.deserializeUser(async (id, done) => {
     done(err);
   }
 });
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression());
+app.use(helmet());
+app.use(limiter);
 
 // create mongoose connection to database
 const mongoose = require('mongoose');

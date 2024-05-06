@@ -13,6 +13,8 @@ router.get('/login', user_controller.login_get);
 
 router.post('/login', user_controller.login_post);
 
+router.get('/log-out', user_controller.log_out_get);
+
 router.get('/join-the-club', user_controller.join_the_club_get);
 
 router.post('/join-the-club', user_controller.join_the_club_post);

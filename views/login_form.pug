@@ -1,0 +1,22 @@
+extends layout 
+
+block sidebar
+  a(href="/users/sign-up") Sign up 
+  a(href="/users/login") Login 
+
+block content 
+  h2= title
+
+  form(method="post")
+    div.form-group
+      label(for="username") #[strong Username: ] 
+      input#username(type="email" name='username' required placeholder='johndoe@someemail.com' value=(undefined===username ? '' : username))
+    div.form-group
+      label(for="password") #[strong Password: ] 
+      input#password(type="password" name='password' required)
+    button(type='submit') Login
+
+  if errors 
+    ul.errors
+      for error in errors 
+        li!= error.msg

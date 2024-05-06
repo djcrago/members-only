@@ -2,8 +2,12 @@ extends layout
 
 block sidebar
   a(href="/users/sign-up") Sign up 
-  a(href="/users/login") Login 
+
+  if !user
+    a(href="/users/login") Login
+
+  if user
+    a(href="/users/log-out") Log out 
 
 block content
   h2= title
-  
