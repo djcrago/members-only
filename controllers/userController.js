@@ -1,11 +1,16 @@
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
 const Message = require('../models/message');
 
 module.exports.index = asyncHandler(async (req, res, next) => {
   res.render('index', { title: 'Home Page' });
+});
+
+module.exports.user_detail = asyncHandler(async (req, res, next) => {
+  res.send('NOT IMPLEMENTED: User detail');
 });
 
 module.exports.sign_up_get = asyncHandler(async (req, res, next) => {
@@ -50,24 +55,28 @@ module.exports.sign_up_post = [
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
-    const user = new User({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      username: req.body.username,
-      password: req.body.password,
-      member: false,
-    });
-
     if (!errors.isEmpty()) {
       res.render('sign_up_form', {
         title: 'Sign up Form',
         user,
         errors: errors.array(),
       });
-    } else {
+    }
+
+    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+      if (err) return next(err);
+
+      const user = new User({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        username: req.body.username,
+        password: hashedPassword,
+        member: false,
+      });
+
       await user.save();
       res.redirect(user.url);
-    }
+    });
   }),
 ];
 
