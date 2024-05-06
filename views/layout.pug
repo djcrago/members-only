@@ -12,11 +12,12 @@ html
         a(href="/users/sign-up") Sign up 
         a(href="/users/login") Login
 
-      if currentUser
-        a(href="/users/log-out") Log out 
-
       if currentUser && !currentUser.member
-        a(href="/users/join-the-club") Join the Club
+        a(href="/users/join-the-club") Join the Club        
+
+      if currentUser
+        a(href="/messages/new-message") Create New Message 
+        a(href="/users/log-out") Log out 
 
     div.block-content
       block content

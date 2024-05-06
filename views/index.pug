@@ -3,3 +3,10 @@ extends layout
 block content
   h2= title
 
+  for message in all_messages
+    div.message
+      h3 #{message.title}
+      if currentUser && currentUser.member
+        p #{message.timestamp_formatted}
+        p #{message.author.full_name}
+      p #{message.text} 

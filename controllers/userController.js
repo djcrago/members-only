@@ -7,7 +7,9 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
 module.exports.index = asyncHandler(async (req, res, next) => {
-  res.render('index', { title: 'Home Page', user: req.user });
+  const allMessages = await Message.find().populate('author').exec();
+
+  res.render('index', { title: 'Home Page', all_messages: allMessages });
 });
 
 module.exports.user_detail = asyncHandler(async (req, res, next) => {
