@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const RateLimit = require('express-rate-limit');
 const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 20,
+  max: 30,
 });
 require('dotenv').config();
 const session = require('express-session');
@@ -59,6 +59,10 @@ passport.deserializeUser(async (id, done) => {
   } catch (err) {
     done(err);
   }
+});
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
 });
 
 app.use(logger('dev'));

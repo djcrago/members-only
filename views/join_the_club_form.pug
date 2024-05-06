@@ -1,0 +1,16 @@
+extends layout 
+
+block content
+  h2= title
+
+  p Enter in the secret passcode in order to become a member.
+
+  form(method="post") 
+    label(for="passcode") #[strong Passcode: ] 
+    input#passcode(type="password" name='passcode' required)
+    button(type='submit') Submit
+
+  if errors 
+    ul.errors
+      for error in errors 
+        li!= error.msg

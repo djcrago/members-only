@@ -101,9 +101,39 @@ module.exports.log_out_get = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.join_the_club_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Join the club get');
+  res.render('join_the_club_form', { title: 'Join the Club' });
 });
 
-module.exports.join_the_club_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Join the club post');
-});
+module.exports.join_the_club_post = [
+  body('passcode', 'Passcode must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .custom((value) => {
+      return value === process.env.SECRET_PASSCODE;
+    })
+    .withMessage('Incorrect passcode'),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const user = new User({
+      first_name: res.locals.currentUser._doc.first_name,
+      last_name: res.locals.currentUser._doc.last_name,
+      username: res.locals.currentUser._doc.username,
+      password: res.locals.currentUser._doc.password,
+      member: true,
+      _id: res.locals.currentUser._id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render('join_the_club_form', {
+        title: 'Join the Club',
+        errors: errors.array(),
+      });
+    } else {
+      await User.findByIdAndUpdate(res.locals.currentUser._id, user, {});
+      res.redirect('/');
+    }
+  }),
+];
