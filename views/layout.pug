@@ -6,7 +6,18 @@ html
   body
     div.block-sidebar
       h1 Health Club
-      a(href="/") Home 
-      block sidebar
+      a(href="/") Home
+
+      if !currentUser
+        a(href="/users/sign-up") Sign up 
+        a(href="/users/login") Login
+
+      if currentUser
+        a(href="/users/log-out") Log out 
+
+      if currentUser && !currentUser.member
+        a(href="/users/join-the-club") Join the Club
+
+      //- block sidebar
     div.block-content
       block content
