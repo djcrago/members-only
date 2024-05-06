@@ -34,3 +34,7 @@ h1 {
 .errors {
   color: red;
 }
+
+.error-page {
+  width: 50vw;
+}
