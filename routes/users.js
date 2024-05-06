@@ -17,4 +17,6 @@ router.get('/join-the-club', user_controller.join_the_club_get);
 
 router.post('/join-the-club', user_controller.join_the_club_post);
 
+router.get('/:id', user_controller.user_detail);
+
 module.exports = router;

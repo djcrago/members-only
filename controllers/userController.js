@@ -14,7 +14,7 @@ module.exports.user_detail = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.sign_up_get = asyncHandler(async (req, res, next) => {
-  res.render('sign_up_form', { title: 'Sign up Form' });
+  res.render('sign_up_form', { title: 'Sign-up Page' });
 });
 
 module.exports.sign_up_post = [
@@ -57,7 +57,7 @@ module.exports.sign_up_post = [
 
     if (!errors.isEmpty()) {
       res.render('sign_up_form', {
-        title: 'Sign up Form',
+        title: 'Sign-up Page',
         user,
         errors: errors.array(),
       });
@@ -81,7 +81,7 @@ module.exports.sign_up_post = [
 ];
 
 module.exports.login_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Login get');
+  res.render('login_form', { title: 'Login Page' });
 });
 
 module.exports.login_post = asyncHandler(async (req, res, next) => {
