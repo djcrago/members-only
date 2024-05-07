@@ -39,3 +39,14 @@ module.exports.new_message_post = [
     }
   }),
 ];
+
+module.exports.delete_message_get = asyncHandler(async (req, res, next) => {
+  const message = await Message.findById(req.params.id).exec();
+
+  res.render('delete_message_form', { title: 'Delete Message', message });
+});
+
+module.exports.delete_message_post = asyncHandler(async (req, res, next) => {
+  await Message.findByIdAndDelete(req.body.messageid).exec();
+  res.redirect('/');
+});

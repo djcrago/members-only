@@ -9,4 +9,6 @@ block content
       if currentUser && currentUser.member
         p #{message.timestamp_formatted}
         p #{message.author.full_name}
-      p #{message.text} 
+      p #{message.text}
+      if currentUser && currentUser.admin 
+        a(href=`/messages/delete-message/${message._id}`) Delete
