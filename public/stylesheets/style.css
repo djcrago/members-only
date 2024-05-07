@@ -173,6 +173,7 @@ button[type='submit']:active {
   font-size: 1.1rem;
 }
 
-.error-page {
-  width: 50vw;
+pre {
+  max-width: 60vw;
+  overflow-x: scroll;
 }
