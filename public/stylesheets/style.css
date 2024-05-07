@@ -141,7 +141,7 @@ button[type='submit'] {
 }
 
 button[type='submit']:hover {
-  background-color: rgb(229, 228, 228);
+  background-color: rgb(233, 233, 233);
   transition: box-shadow 0.3s, background-color 0.3s;
   box-shadow: 2px 2px 1px 1px blue;
 }
@@ -152,7 +152,16 @@ button[type='submit']:active {
 }
 
 .errors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+  list-style: none;
+}
+
+.error {
   color: red;
+  font-size: 1.1rem;
 }
 
 .error-page {

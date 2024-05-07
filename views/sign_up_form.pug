@@ -23,5 +23,6 @@ block content
 
   if errors 
     ul.errors
+      li Sign-up failed: Correct below errors and try again
       for error in errors 
-        li!= error.msg
+        li.error!= error.msg
