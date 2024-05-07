@@ -4,7 +4,13 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
 module.exports.new_message_get = asyncHandler(async (req, res, next) => {
-  res.render('new_message_form', { title: 'Write a New Message' });
+  const isLoggedIn = res.locals.currentUser;
+
+  if (isLoggedIn) {
+    res.render('new_message_form', { title: 'Write a New Message' });
+  } else {
+    res.redirect('/');
+  }
 });
 
 module.exports.new_message_post = [
@@ -22,8 +28,8 @@ module.exports.new_message_post = [
 
     const message = new Message({
       title: req.body.title,
-      text: req.body.text,
       timestamp: Date.now(),
+      text: req.body.text,
       author: res.locals.currentUser._id,
     });
 
@@ -41,12 +47,26 @@ module.exports.new_message_post = [
 ];
 
 module.exports.delete_message_get = asyncHandler(async (req, res, next) => {
-  const message = await Message.findById(req.params.id).exec();
+  const isLoggedIn = res.locals.currentUser;
 
-  res.render('delete_message_form', { title: 'Delete Message', message });
+  if (isLoggedIn) {
+    const isAdmin = res.locals.currentUser.admin;
+
+    if (isAdmin) {
+      const message = await Message.findById(req.params.id).exec();
+      res.render('delete_message_form', { title: 'Delete Message', message });
+    }
+  }
+
+  res.redirect('/');
 });
 
 module.exports.delete_message_post = asyncHandler(async (req, res, next) => {
-  await Message.findByIdAndDelete(req.body.messageid).exec();
+  const isAdmin = res.locals.currentUser.admin;
+
+  if (isAdmin) {
+    await Message.findByIdAndDelete(req.body.messageid).exec();
+  }
+
   res.redirect('/');
 });
