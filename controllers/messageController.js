@@ -61,9 +61,9 @@ module.exports.delete_message_get = asyncHandler(async (req, res, next) => {
 
       res.render('delete_message_form', { title: 'Delete Message', message });
     }
+  } else {
+    res.redirect('/');
   }
-
-  res.redirect('/');
 });
 
 module.exports.delete_message_post = asyncHandler(async (req, res, next) => {

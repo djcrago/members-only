@@ -160,9 +160,9 @@ module.exports.become_admin_get = asyncHandler(async (req, res, next) => {
     if (isMember) {
       res.render('become_admin_form', { title: 'Become an Admin' });
     }
+  } else {
+    res.redirect('/');
   }
-
-  res.redirect('/');
 });
 
 module.exports.become_admin_post = [
