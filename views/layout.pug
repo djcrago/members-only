@@ -15,7 +15,7 @@ html
       if currentUser && !currentUser.member
         a(href="/users/join-the-club") Join the Club
       
-      if currentUser && currentUser.member 
+      if currentUser && currentUser.member && !currentUser.admin
         a(href="/users/become-admin") Become an Admin 
 
       if currentUser
