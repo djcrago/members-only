@@ -10,8 +10,7 @@ block content
         p #{message.author.full_name}
       p #{message.text}
 
-  p Are you sure you want to delete this message?
-
-  form(method='post')
+  form(method='post').delete-form
+    p Are you sure you want to delete this message?
     input(type="hidden" name='messageid' value=message._id)
-    button(type='submit') Delete
+    button(type='submit') Delete Message
