@@ -4,13 +4,16 @@ block content
   h2= title
 
   form(method="post")
-    label(for="title") #[strong Title: ]
-    input#title(type="text" name='title' required placeholder='Title of message' value=(undefined===message ? '' : message.title))
-    label(for="text") #[strong Body: ]
-    textarea#text(type='text' name="text" required placeholder='Body of message')=(undefined===message ? '' : message.text)
+    div.form-group
+      label(for="title") #[strong Title: ]
+      input#title(type="text" name='title' required placeholder='Title of message' value=(undefined===message ? '' : message.title))
+    div.form-group
+      label(for="text") #[strong Body: ]
+      textarea#text(type='text' name="text" required placeholder='Body of message')=(undefined===message ? '' : message.text)
     button(type='submit') Submit
 
   if errors 
     ul.errors
+      li Blog-post failed: Correct below errors and try again
       for error in errors 
-        li!= error.msg
+        li.error!= error.msg
