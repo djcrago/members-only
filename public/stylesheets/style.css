@@ -18,7 +18,7 @@ header {
   justify-content: center;
   align-items: center;
   background-color: rgb(255, 166, 0);
-  height: 7vh;
+  padding: 16px 0;
 }
 
 h1 {
@@ -111,7 +111,7 @@ form {
   flex-direction: column;
   gap: 2vh;
   min-width: max-content;
-  margin-top: 5vh;
+  margin-top: 3vh;
   padding: 3vw;
   font-size: 1.1rem;
   border: 1px solid #000;
