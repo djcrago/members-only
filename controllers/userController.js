@@ -12,16 +12,12 @@ module.exports.index = asyncHandler(async (req, res, next) => {
   res.render('index', { title: 'Home Page', all_messages: allMessages });
 });
 
-module.exports.user_detail = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: User detail');
-});
-
 module.exports.sign_up_get = asyncHandler(async (req, res, next) => {
   res.render('sign_up_form', { title: 'Sign-up Page' });
 });
 
 module.exports.sign_up_post = [
-  // Sanitize/validate form fields
+  // Validate/sanitize req.body
   body('first_name', 'First name must not be empty')
     .trim()
     .isLength({ min: 1 })
@@ -32,22 +28,22 @@ module.exports.sign_up_post = [
     .escape(),
   body('username', 'Username must be an email')
     .trim()
-    .isLength({ min: 4 })
-    .withMessage('Username must be at least 4 characters')
-    .escape()
-    .isEmail()
     .custom(async (value) => {
       const userExists = await User.findOne({ username: value }).exec();
+
       if (userExists) {
         throw new Error('Email is already in use');
       }
-    }),
-  body('password')
+    })
+    .isLength({ min: 4 })
+    .withMessage('Username must be at least 4 characters')
+    .escape()
+    .isEmail(),
+  body('password', 'Password must be at least 6 characters')
     .trim()
     .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters')
     .escape(),
-  body('password_confirm', 'Passwords do not match')
+  body('password_confirm', "Passwords don't match")
     .trim()
     .custom((value, { req }) => {
       const password = req.body.password;
@@ -61,7 +57,16 @@ module.exports.sign_up_post = [
 
       const errors = validationResult(req);
 
+      const user = new User({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        username: req.body.username,
+        password: hashedPassword,
+        member: false,
+      });
+
       if (!errors.isEmpty()) {
+        // Re-render form with passed in values and display error messages
         res.render('sign_up_form', {
           title: 'Sign-up Page',
           user: req.body,
@@ -69,15 +74,10 @@ module.exports.sign_up_post = [
         });
       } else {
         try {
-          const user = new User({
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            username: req.body.username,
-            password: hashedPassword,
-            member: false,
-          });
+          // Save the new user to the database
           await user.save();
-          res.redirect('/');
+
+          res.redirect('/users/login');
         } catch (err) {
           return next(err);
         }
@@ -90,14 +90,17 @@ module.exports.login_get = asyncHandler(async (req, res, next) => {
   res.render('login_form', { title: 'Login Page' });
 });
 
-module.exports.login_post = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/users/login',
+module.exports.login_post = asyncHandler(async (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+  });
 });
 
 module.exports.log_out_get = asyncHandler(async (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
+
     res.redirect('/');
   });
 });
@@ -107,14 +110,15 @@ module.exports.join_the_club_get = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.join_the_club_post = [
-  body('passcode', 'Passcode must not be empty')
+  // Validate/sanitize req.body
+  body('passcode', 'Incorrect passcode')
     .trim()
     .isLength({ min: 1 })
+    .withMessage('Passcode must not be empty')
     .escape()
     .custom((value) => {
       return value === process.env.SECRET_MEMBER_PASSCODE;
-    })
-    .withMessage('Incorrect passcode'),
+    }),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -129,12 +133,15 @@ module.exports.join_the_club_post = [
     });
 
     if (!errors.isEmpty()) {
+      // Re-render form and display error messages
       res.render('join_the_club_form', {
         title: 'Join the Club',
         errors: errors.array(),
       });
     } else {
+      // Update the user in the database
       await User.findByIdAndUpdate(res.locals.currentUser._id, user, {});
+
       res.redirect('/');
     }
   }),
@@ -145,6 +152,7 @@ module.exports.become_admin_get = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.become_admin_post = [
+  // Validate/sanitize req.body
   body('passcode', 'Passcode must not be empty')
     .trim()
     .isLength({ min: 1 })
@@ -168,12 +176,15 @@ module.exports.become_admin_post = [
     });
 
     if (!errors.isEmpty()) {
+      // Re-render form and display error messages
       res.render('become_admin_form', {
         title: 'Become an Admin',
         errors: errors.array(),
       });
     } else {
+      // Update the user in the database
       await User.findByIdAndUpdate(res.locals.currentUser._id, user, {});
+
       res.redirect('/');
     }
   }),

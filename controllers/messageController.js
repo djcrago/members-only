@@ -14,6 +14,7 @@ module.exports.new_message_get = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.new_message_post = [
+  // Validate/sanitize req.body
   body('title', 'Title of message must not be empty')
     .trim()
     .isLength({ min: 1 })
@@ -34,13 +35,16 @@ module.exports.new_message_post = [
     });
 
     if (!errors.isEmpty()) {
+      // Re-render form with passed in values and display error messages
       res.render('new_message_form', {
         title: 'Write a New Message',
         message,
         errors: errors.array(),
       });
     } else {
+      // Save the new message to the database
       await message.save();
+
       res.redirect('/');
     }
   }),
@@ -54,6 +58,7 @@ module.exports.delete_message_get = asyncHandler(async (req, res, next) => {
 
     if (isAdmin) {
       const message = await Message.findById(req.params.id).exec();
+
       res.render('delete_message_form', { title: 'Delete Message', message });
     }
   }
