@@ -3,7 +3,7 @@ extends layout
 block content
   h2= title
 
-  p Enter in the secret passcode in order to become an admin.
+  p Enter the secret admin passcode in order to become an admin.
 
   form(method="post") 
     label(for="passcode") #[strong Passcode: ] 
@@ -13,4 +13,4 @@ block content
   if errors 
     ul.errors
       for error in errors 
-        li!= error.msg
+        li.error!= error.msg

@@ -14,6 +14,5 @@ block content
 
   if errors 
     ul.errors
-      li Blog-post failed: Correct below errors and try again
       for error in errors 
         li.error!= error.msg
