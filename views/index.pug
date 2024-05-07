@@ -1,14 +1,13 @@
 extends layout
 
 block content
-  h2= title
 
   for message in all_messages
     div.message
       h3 #{message.title}
       if currentUser && currentUser.member
-        p #{message.timestamp_formatted}
-        p #{message.author.full_name}
+        p #[em #{message.author.full_name}]
+        p #[em #{message.timestamp_formatted}]
       p #{message.text}
       if currentUser && currentUser.admin 
         a(href=`/messages/delete-message/${message._id}`) Delete
