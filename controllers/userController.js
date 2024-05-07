@@ -90,11 +90,9 @@ module.exports.login_get = asyncHandler(async (req, res, next) => {
   res.render('login_form', { title: 'Login Page' });
 });
 
-module.exports.login_post = asyncHandler(async (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/users/login',
-  });
+module.exports.login_post = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/users/login',
 });
 
 module.exports.log_out_get = asyncHandler(async (req, res, next) => {
@@ -106,7 +104,13 @@ module.exports.log_out_get = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.join_the_club_get = asyncHandler(async (req, res, next) => {
-  res.render('join_the_club_form', { title: 'Join the Club' });
+  const isLoggedIn = res.locals.currentUser;
+
+  if (isLoggedIn) {
+    res.render('join_the_club_form', { title: 'Join the Club' });
+  } else {
+    res.redirect('/');
+  }
 });
 
 module.exports.join_the_club_post = [
@@ -148,7 +152,17 @@ module.exports.join_the_club_post = [
 ];
 
 module.exports.become_admin_get = asyncHandler(async (req, res, next) => {
-  res.render('become_admin_form', { title: 'Become an Admin' });
+  const isLoggedIn = res.locals.currentUser;
+
+  if (isLoggedIn) {
+    const isMember = res.locals.currentUser.member;
+
+    if (isMember) {
+      res.render('become_admin_form', { title: 'Become an Admin' });
+    }
+  }
+
+  res.redirect('/');
 });
 
 module.exports.become_admin_post = [
