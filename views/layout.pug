@@ -9,6 +9,9 @@ html
     div.main
       div.block-sidebar
         nav
+          if currentUser 
+            p Hello #{currentUser.full_name}!
+
           a(href="/") Home
 
           if !currentUser
