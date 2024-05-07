@@ -10,7 +10,7 @@ block content
     div.form-group
       label(for="text") #[strong Body: ]
       textarea#text(type='text' name="text" required placeholder='Body of message')=(undefined===message ? '' : message.text)
-    button(type='submit') Submit
+    button(type='submit') Create Message
 
   if errors 
     ul.errors

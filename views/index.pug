@@ -10,4 +10,4 @@ block content
         p #[em #{message.timestamp_formatted}]
       p #{message.text}
       if currentUser && currentUser.admin 
-        a.delete-message(href=`/messages/delete-message/${message._id}`) Delete
+        a.delete-btn(href=`/messages/delete-message/${message._id}`) Delete Message
