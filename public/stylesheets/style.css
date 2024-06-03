@@ -7,6 +7,7 @@
 body {
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 button {
@@ -22,57 +23,68 @@ header {
 }
 
 h1 {
-  text-decoration: underline;
   font-size: 2.25rem;
 }
 
 .main {
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.block-sidebar {
+.sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3vh;
+  gap: 1vh;
   background-color: lightblue;
-  min-height: 93vh;
-  min-width: max-content;
-  width: 25vw;
-  max-width: 300px;
-  padding: 32px 8px;
+  width: 100vw;
+  padding: 8px 8px;
+  font-size: 1.2rem;
 }
 
 nav {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4vh;
+  gap: 1vw;
   font-size: 1.2rem;
 }
 
-a:link,
-a:visited {
+.link:link,
+.link:visited {
   text-decoration: none;
   color: black;
   border: 1px solid gray;
   background-color: rgb(250, 250, 250);
+  width: max-content;
   padding: 8px;
-  border-radius: 4px;
-  transition: box-shadow 0.3s;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
   box-shadow: none;
 }
 
-a:hover {
-  transition: box-shadow 0.3s;
-  box-shadow: 4px 4px 1px 1px red;
+.link:hover {
+  transition: box-shadow 0.2s;
+  box-shadow: 3px 3px 1px 1px red;
 }
 
-a:active {
+.link:active {
   color: blue;
 }
 
-.block-content {
+.header-link {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  color: #000;
+  text-decoration: none;
+}
+
+.header-link img {
+  height: 40px;
+}
+
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,19 +103,8 @@ a:active {
   max-width: 1000px;
   padding: 32px;
   font-size: 1.1rem;
-  border-radius: 16px;
-  box-shadow: 1px 1px 3px 1px lightgray;
-  transition: transform 0.5s;
-  transform: scale(1);
-}
-
-.message:hover {
-  transition: transform 0.5s;
-  transform: scale(1.005);
-}
-
-.delete-btn {
-  align-self: center;
+  border-radius: 8px;
+  border: 1px solid #000;
 }
 
 form {
@@ -115,6 +116,7 @@ form {
   padding: 3vw;
   font-size: 1.1rem;
   border: 1px solid #000;
+  border-radius: 8px;
 }
 
 .form-group {
@@ -128,10 +130,11 @@ textarea {
   padding: 4px;
   width: 300px;
   font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 textarea {
-  height: 40vh;
+  min-height: 40vh;
 }
 
 button[type='submit'] {
@@ -140,14 +143,14 @@ button[type='submit'] {
   border: 1px solid gray;
   background-color: rgb(243, 243, 243);
   padding: 8px;
-  border-radius: 4px;
-  transition: box-shadow 0.3s, background-color 0.3s;
+  border-radius: 8px;
+  transition: box-shadow 0.3s, background-color 0.2s;
   box-shadow: none;
 }
 
 button[type='submit']:hover {
   background-color: rgb(233, 233, 233);
-  transition: box-shadow 0.3s, background-color 0.3s;
+  transition: box-shadow 0.3s, background-color 0.2s;
   box-shadow: 2px 2px 1px 1px blue;
 }
 
@@ -158,6 +161,29 @@ button[type='submit']:active {
 
 .delete-form {
   border: none;
+}
+
+.delete-btn,
+button.delete-btn {
+  align-self: center;
+  transition: box-shadow 0.2s, background-color 0.2s, color 0.2s;
+  box-shadow: none;
+}
+
+.delete-btn:hover,
+button.delete-btn:hover {
+  transition: box-shadow 0.2s, background-color 0.2s, color 0.2s;
+  box-shadow: 2px 2px 1px 1px red;
+}
+
+button.delete-btn:hover {
+  background-color: rgb(252, 235, 235);
+  color: red;
+}
+
+button.delete-btn:active {
+  transition: background-color 0s;
+  background-color: white;
 }
 
 .errors {
@@ -176,4 +202,29 @@ button[type='submit']:active {
 pre {
   max-width: 60vw;
   overflow-x: scroll;
+}
+
+@media (min-width: 600px) {
+  .main {
+    flex-direction: row;
+    align-items: flex-start;
+    background-color: lightblue;
+  }
+
+  .sidebar {
+    gap: 4vh;
+    width: 25vw;
+    min-width: max-content;
+    max-width: 300px;
+    padding-top: 32px;
+  }
+
+  nav {
+    flex-direction: column;
+    gap: 3vh;
+  }
+
+  .content {
+    background-color: white;
+  }
 }
